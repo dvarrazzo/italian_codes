@@ -54,7 +54,7 @@ begin
         return _cf_error_16(s);
 
     elsif length(s) = 11 then
-        return 'TODO';
+        return _cf_error_11(s);
 
     else
         return 'lunghezza errata: ' || length(s)::text
@@ -140,7 +140,39 @@ begin
     -- Check the control code
     if _cf_check_char(substring(s from 1 for 15))
             != substring(s from 16 for 1) then
-        return 'codice di controllo sbagliato';
+        return 'codice di controllo sbagliato in posizione 16';
+    end if;
+
+    -- All fine
+    return null;
+end
+$$ immutable strict language plpgsql;
+
+create function _cf_error_11(s text) returns text as
+$$
+begin
+    -- Check the basic pattern. If it doesn't match, slow check for errors.
+    if regexp_matches(s, '[0-9]{11}|') = array[''] then
+        for i in 1 .. 11 loop
+            declare
+                c text := substring(s, i, 1);
+            begin
+                if c not between '0' and '9' then
+                    return 'carattere non valido in posizione ' || i
+                        || ': atteso un numero';
+                end if;
+            end;
+        end loop;
+
+        -- You shouldn't be there
+        raise 'assert failed in codice_fiscale_error with input %',
+            s;
+    end if;
+
+    -- Check the control digit
+    if _cf_check_digit(substring(s from 1 for 10))
+            != substring(s from 11 for 1) then
+        return 'cifra di controllo sbagliato in posizione 11';
     end if;
 
     -- All fine
@@ -173,9 +205,9 @@ begin
     for i in 1 .. length(s) by 2 loop
         c := substring(s from i for 1);
         if c between 'A' and 'Z' then
-            acc := acc + odd_chars[1+(ascii(c) - ascii('A'))];
+            acc := acc + odd_chars[1 + (ascii(c) - ascii('A'))];
         else
-            acc := acc + odd_chars[1+(ascii(c) - ascii('0'))];
+            acc := acc + odd_chars[1 + (ascii(c) - ascii('0'))];
         end if;
     end loop;
 
@@ -204,6 +236,32 @@ begin
     end loop;
 
     return acc;
+end
+$$ immutable strict language plpgsql;
+
+create function _cf_check_digit(s text) returns text as
+$$
+-- Return the control digit of a Codice Fiscale per Persone Giuridiche.
+-- Assume the string only contains valid chars (digits).
+declare
+    acc int := 0;
+    c text;
+    even_values constant integer[] := array[0,2,4,6,8,1,3,5,7,9];
+
+begin
+    -- Odd chars
+    for i in 1 .. length(s) by 2 loop
+        c := substring(s from i for 1);
+        acc := acc + (ascii(c) - ascii('0'));
+    end loop;
+
+    -- Even chars
+    for i in 2 .. length(s) by 2 loop
+        c := substring(s from i for 1);
+        acc := acc + even_values[1 + (ascii(c) - ascii('0'))];
+    end loop;
+
+    return chr(ascii('0') + (10 - (acc % 10)) % 10);
 end
 $$ immutable strict language plpgsql;
 

@@ -11,6 +11,10 @@ language sql immutable strict;
 
 \set ECHO all
 
+--
+-- Codice Fiscale Persone Fisiche
+--
+
 -- base usage
 select 'MSSTRS53B19H892P'::codice_fiscale;
 select codice_fiscale('MSSTRS53B19H892P');
@@ -135,3 +139,40 @@ select add_check_and_error('MSSTRS53A40H892');
 -- control code
 select codice_fiscale('MSSTRS53B19H892O');
 select codice_fiscale('MSSTRS53B19H892Q');
+
+--
+-- Codice Fiscale Persone Giuridiche
+--
+
+-- base usage
+select '94144670489'::codice_fiscale;
+select codice_fiscale('94144670489');
+
+-- normalization
+select codice_fiscale(E'\t9414467 048 9 '::text);
+
+-- error
+select codice_fiscale('9414467048'::text);
+
+-- error message for wrong length
+select codice_fiscale_error('');
+select codice_fiscale_error('94144670489');
+select codice_fiscale_error('941446704899');
+
+-- error message for wrong char
+select codice_fiscale_error('A4144670489');
+select codice_fiscale_error('9A144670489');
+select codice_fiscale_error('94A44670489');
+select codice_fiscale_error('941A4670489');
+select codice_fiscale_error('9414A670489');
+select codice_fiscale_error('94144A70489');
+select codice_fiscale_error('941446A0489');
+select codice_fiscale_error('9414467A489');
+select codice_fiscale_error('94144670A89');
+select codice_fiscale_error('941446704A9');
+select codice_fiscale_error('9414467048A');
+
+-- bad control digit
+select codice_fiscale_error('94144670488');
+select codice_fiscale_error('94144670480');
+

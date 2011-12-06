@@ -1,4 +1,7 @@
 \set ECHO none
+--
+-- Codice Fiscale Persone Fisiche
+--
 -- base usage
 select 'MSSTRS53B19H892P'::codice_fiscale;
 MSSTRS53B19H892P
@@ -201,6 +204,56 @@ select add_check_and_error('MSSTRS53A40H892');
 giorno di nascita sbagliato in posizione 7-8
 -- control code
 select codice_fiscale('MSSTRS53B19H892O');
-ERROR:  Codice Fiscale non valido: codice di controllo sbagliato
+ERROR:  Codice Fiscale non valido: codice di controllo sbagliato in posizione 16
 select codice_fiscale('MSSTRS53B19H892Q');
-ERROR:  Codice Fiscale non valido: codice di controllo sbagliato
+ERROR:  Codice Fiscale non valido: codice di controllo sbagliato in posizione 16
+--
+-- Codice Fiscale Persone Giuridiche
+--
+-- base usage
+select '94144670489'::codice_fiscale;
+94144670489
+select codice_fiscale('94144670489');
+94144670489
+-- normalization
+select codice_fiscale(E'\t9414467 048 9 '::text);
+94144670489
+-- error
+select codice_fiscale('9414467048'::text);
+ERROR:  Codice Fiscale non valido: lunghezza errata: 10; attesi 11 o 16 caratteri
+CONTEXT:  SQL function "codice_fiscale" statement 1
+-- error message for wrong length
+select codice_fiscale_error('');
+lunghezza errata: 0; attesi 11 o 16 caratteri
+select codice_fiscale_error('94144670489');
+
+select codice_fiscale_error('941446704899');
+lunghezza errata: 12; attesi 11 o 16 caratteri
+-- error message for wrong char
+select codice_fiscale_error('A4144670489');
+carattere non valido in posizione 1: atteso un numero
+select codice_fiscale_error('9A144670489');
+carattere non valido in posizione 2: atteso un numero
+select codice_fiscale_error('94A44670489');
+carattere non valido in posizione 3: atteso un numero
+select codice_fiscale_error('941A4670489');
+carattere non valido in posizione 4: atteso un numero
+select codice_fiscale_error('9414A670489');
+carattere non valido in posizione 5: atteso un numero
+select codice_fiscale_error('94144A70489');
+carattere non valido in posizione 6: atteso un numero
+select codice_fiscale_error('941446A0489');
+carattere non valido in posizione 7: atteso un numero
+select codice_fiscale_error('9414467A489');
+carattere non valido in posizione 8: atteso un numero
+select codice_fiscale_error('94144670A89');
+carattere non valido in posizione 9: atteso un numero
+select codice_fiscale_error('941446704A9');
+carattere non valido in posizione 10: atteso un numero
+select codice_fiscale_error('9414467048A');
+carattere non valido in posizione 11: atteso un numero
+-- bad control digit
+select codice_fiscale_error('94144670488');
+cifra di controllo sbagliato in posizione 11
+select codice_fiscale_error('94144670480');
+cifra di controllo sbagliato in posizione 11
