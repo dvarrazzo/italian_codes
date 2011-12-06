@@ -1,0 +1,4 @@
+# italian_codes extension
+comment = 'Validation domains for Italian fiscal codes'
+default_version = '0.1'
+relocatable = true

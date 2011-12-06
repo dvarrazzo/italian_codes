@@ -1,0 +1,206 @@
+\set ECHO none
+-- base usage
+select 'MSSTRS53B19H892P'::codice_fiscale;
+MSSTRS53B19H892P
+select codice_fiscale('MSSTRS53B19H892P');
+MSSTRS53B19H892P
+-- normalization
+-- note that with the naked literal in round brackets (above), the
+-- parser prefers to interpret the expression as a literal with type.
+select codice_fiscale(E'\tmss trs 53b19 h892 p '::text);
+MSSTRS53B19H892P
+-- strict function
+select codice_fiscale(NULL::text);
+
+-- error
+select codice_fiscale('MSSTRS53B19H892'::text);
+ERROR:  Codice Fiscale non valido: lunghezza errata: 15; attesi 11 o 16 caratteri
+CONTEXT:  SQL function "codice_fiscale" statement 1
+-- error message for wrong length
+select codice_fiscale_error(''::text);
+lunghezza errata: 0; attesi 11 o 16 caratteri
+select codice_fiscale_error('MSSTRS53B19H892'::text);
+lunghezza errata: 15; attesi 11 o 16 caratteri
+select codice_fiscale_error('MSSTRS53B19H892PP'::text);
+lunghezza errata: 17; attesi 11 o 16 caratteri
+-- error message for wrong char
+select codice_fiscale_error('0SSTRS53B19H892P'::text);
+carattere non valido in posizione 1: attesa una lettera
+select codice_fiscale_error('M0STRS53B19H892P'::text);
+carattere non valido in posizione 2: attesa una lettera
+select codice_fiscale_error('MS0TRS53B19H892P'::text);
+carattere non valido in posizione 3: attesa una lettera
+select codice_fiscale_error('MSS0RS53B19H892P'::text);
+carattere non valido in posizione 4: attesa una lettera
+select codice_fiscale_error('MSST0S53B19H892P'::text);
+carattere non valido in posizione 5: attesa una lettera
+select codice_fiscale_error('MSSTR053B19H892P'::text);
+carattere non valido in posizione 6: attesa una lettera
+select codice_fiscale_error('MSSTRSA3B19H892P'::text);
+carattere non valido in posizione 7: atteso un numero
+select codice_fiscale_error('MSSTRS5AB19H892P'::text);
+carattere non valido in posizione 8: atteso un numero
+select codice_fiscale_error('MSSTRS53019H892P'::text);
+carattere non valido in posizione 9: attesa una lettera
+select codice_fiscale_error('MSSTRS53BA9H892P'::text);
+carattere non valido in posizione 10: atteso un numero
+select codice_fiscale_error('MSSTRS53B1AH892P'::text);
+carattere non valido in posizione 11: atteso un numero
+select codice_fiscale_error('MSSTRS53B190892P'::text);
+carattere non valido in posizione 12: attesa una lettera
+select codice_fiscale_error('MSSTRS53B19HA92P'::text);
+carattere non valido in posizione 13: atteso un numero
+select codice_fiscale_error('MSSTRS53B19H8A2P'::text);
+carattere non valido in posizione 14: atteso un numero
+select codice_fiscale_error('MSSTRS53B19H89AP'::text);
+carattere non valido in posizione 15: atteso un numero
+select codice_fiscale_error('MSSTRS53B19H8920'::text);
+carattere non valido in posizione 16: attesa una lettera
+select codice_fiscale_error('MSSTRS-3B19H892P'::text);
+carattere non valido in posizione 7: atteso un numero
+-- all replacement characters for omocodia accepted
+select add_check_and_error('MSSTRSL3B19H892');
+
+select add_check_and_error('MSSTRSM3B19H892');
+
+select add_check_and_error('MSSTRSN3B19H892');
+
+select add_check_and_error('MSSTRSP3B19H892');
+
+select add_check_and_error('MSSTRSQ3B19H892');
+
+select add_check_and_error('MSSTRSR3B19H892');
+
+select add_check_and_error('MSSTRSS3B19H892');
+
+select add_check_and_error('MSSTRST3B19H892');
+
+select add_check_and_error('MSSTRSU3B19H892');
+
+select add_check_and_error('MSSTRSV3B19H892');
+
+-- a few chars are not accepted instead
+select add_check_and_error('MSSTRSA3B19H892');
+carattere non valido in posizione 7: atteso un numero
+select add_check_and_error('MSSTRSK3B19H892');
+carattere non valido in posizione 7: atteso un numero
+select add_check_and_error('MSSTRSO3B19H892');
+carattere non valido in posizione 7: atteso un numero
+select add_check_and_error('MSSTRSW3B19H892');
+carattere non valido in posizione 7: atteso un numero
+select add_check_and_error('MSSTRSZ3B19H892');
+carattere non valido in posizione 7: atteso un numero
+-- all numbers can be replaced
+select add_check_and_error('MSSTRSR3B19H892');
+
+select add_check_and_error('MSSTRS5PB19H892');
+
+select add_check_and_error('MSSTRS53BM9H892');
+
+select add_check_and_error('MSSTRS53B1VH892');
+
+select add_check_and_error('MSSTRS53B19HU92');
+
+select add_check_and_error('MSSTRS53B19H8V2');
+
+select add_check_and_error('MSSTRS53B19H89N');
+
+-- month lengths ok
+select add_check_and_error('MSSTRS53A01H892');
+
+select add_check_and_error('MSSTRS53A31H892');
+
+select add_check_and_error('MSSTRS53B28H892');
+
+select add_check_and_error('MSSTRS52B29H892');
+
+select add_check_and_error('MSSTRS53C31H892');
+
+select add_check_and_error('MSSTRS53D30H892');
+
+select add_check_and_error('MSSTRS53E31H892');
+
+select add_check_and_error('MSSTRS53H30H892');
+
+select add_check_and_error('MSSTRS53L31H892');
+
+select add_check_and_error('MSSTRS53M31H892');
+
+select add_check_and_error('MSSTRS53P30H892');
+
+select add_check_and_error('MSSTRS53R31H892');
+
+select add_check_and_error('MSSTRS53S30H892');
+
+select add_check_and_error('MSSTRS53T31H892');
+
+-- women
+select add_check_and_error('MSSTRS53A41H892');
+
+select add_check_and_error('MSSTRS53A71H892');
+
+select add_check_and_error('MSSTRS53B68H892');
+
+select add_check_and_error('MSSTRS52B69H892');
+
+select add_check_and_error('MSSTRS53C71H892');
+
+select add_check_and_error('MSSTRS53D70H892');
+
+select add_check_and_error('MSSTRS53E71H892');
+
+select add_check_and_error('MSSTRS53H70H892');
+
+select add_check_and_error('MSSTRS53L71H892');
+
+select add_check_and_error('MSSTRS53M71H892');
+
+select add_check_and_error('MSSTRS53P70H892');
+
+select add_check_and_error('MSSTRS53R71H892');
+
+select add_check_and_error('MSSTRS53S70H892');
+
+select add_check_and_error('MSSTRS53T71H892');
+
+-- month lengths wrong
+select add_check_and_error('MSSTRS53A32H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53B29H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS52B30H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53C32H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53D31H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53E32H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53H31H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53L32H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53M32H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53P31H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53R32H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53S31H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53T32H892');
+giorno di nascita sbagliato in posizione 7-8
+-- other bad dates
+select add_check_and_error('MSSTRS53A00H892');
+giorno di nascita sbagliato in posizione 7-8
+select add_check_and_error('MSSTRS53F01H892');
+carattere per il mese sbagliato in posizione 9
+select add_check_and_error('MSSTRS53U01H892');
+carattere per il mese sbagliato in posizione 9
+select add_check_and_error('MSSTRS53A40H892');
+giorno di nascita sbagliato in posizione 7-8
+-- control code
+select codice_fiscale('MSSTRS53B19H892O');
+ERROR:  Codice Fiscale non valido: codice di controllo sbagliato
+select codice_fiscale('MSSTRS53B19H892Q');
+ERROR:  Codice Fiscale non valido: codice di controllo sbagliato

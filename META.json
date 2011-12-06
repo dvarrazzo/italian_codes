@@ -1,0 +1,22 @@
+{
+   "name": "italian_codes",
+   "abstract": "Validation domains for Italian fiscal codes",
+   "description": "The package contains validation domains for Italian codes, such as Codice Fiscale and Partita IVA",
+   "version": "0.1devel",
+   "maintainer": "Daniele Varrazzo <daniele.varrazzo@gmail.com>",
+   "license": "BSD",
+   "provides": {
+      "italian_codes": {
+         "abstract": "Validation domains for Italian fiscal codes",
+         "file": "sql/italian_codes.sql",
+         "docfile": "doc/italian_codes.rst",
+         "version": "0.1devel"
+      }
+   },
+   "release_status": "unstable",
+   "generated_by": "Daniele Varrazzo <daniele.varrazzo@gmail.com>",
+   "meta-spec": {
+      "version": "1.0.0",
+      "url": "http://pgxn.org/meta/spec.txt"
+   }
+}
