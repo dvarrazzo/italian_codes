@@ -1,5 +1,4 @@
 \set ECHO none
-\i sql/italian_codes.sql
 \t
 \a
 create function add_check_and_error(s text) returns text as
@@ -10,7 +9,6 @@ $$
 language sql immutable strict;
 
 \set ECHO all
-
 --
 -- Codice Fiscale Persone Fisiche
 --
@@ -140,6 +138,7 @@ select add_check_and_error('MSSTRS53A40H892');
 select codice_fiscale('MSSTRS53B19H892O');
 select codice_fiscale('MSSTRS53B19H892Q');
 
+
 --
 -- Codice Fiscale Persone Giuridiche
 --
@@ -175,4 +174,3 @@ select codice_fiscale_error('9414467048A');
 -- bad control digit
 select codice_fiscale_error('94144670488');
 select codice_fiscale_error('94144670480');
-

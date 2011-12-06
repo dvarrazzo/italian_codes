@@ -1,0 +1,54 @@
+\set ECHO none
+--
+-- Partita IVA
+--
+-- base usage
+select '05753460483'::partita_iva;
+05753460483
+select partita_iva('05753460483');
+05753460483
+-- normalization
+select partita_iva(E'\t0575346 048 3 '::text);
+05753460483
+-- strict function
+select partita_iva(NULL::text);
+
+-- error
+select partita_iva('0575346048'::text);
+ERROR:  Partita IVA non valida: lunghezza errata: 10; attesi 11 caratteri
+CONTEXT:  SQL function "partita_iva" statement 1
+-- error message for wrong length
+select partita_iva_error('');
+lunghezza errata: 0; attesi 11 caratteri
+select partita_iva_error('0575346048');
+lunghezza errata: 10; attesi 11 caratteri
+select partita_iva_error('057534604833');
+lunghezza errata: 12; attesi 11 caratteri
+-- error message for wrong char
+select partita_iva_error('A5753460483');
+carattere non valido in posizione 1: atteso un numero
+select partita_iva_error('0A753460483');
+carattere non valido in posizione 2: atteso un numero
+select partita_iva_error('05A53460483');
+carattere non valido in posizione 3: atteso un numero
+select partita_iva_error('057A3460483');
+carattere non valido in posizione 4: atteso un numero
+select partita_iva_error('0575A460483');
+carattere non valido in posizione 5: atteso un numero
+select partita_iva_error('05753A60483');
+carattere non valido in posizione 6: atteso un numero
+select partita_iva_error('057534A0483');
+carattere non valido in posizione 7: atteso un numero
+select partita_iva_error('0575346A483');
+carattere non valido in posizione 8: atteso un numero
+select partita_iva_error('05753460A83');
+carattere non valido in posizione 9: atteso un numero
+select partita_iva_error('057534604A3');
+carattere non valido in posizione 10: atteso un numero
+select partita_iva_error('0575346048A');
+carattere non valido in posizione 11: atteso un numero
+-- bad control digit
+select partita_iva_error('05753460482');
+cifra di controllo sbagliata in posizione 11
+select partita_iva_error('05753460484');
+cifra di controllo sbagliata in posizione 11

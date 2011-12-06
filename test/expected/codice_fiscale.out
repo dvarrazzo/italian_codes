@@ -254,6 +254,6 @@ select codice_fiscale_error('9414467048A');
 carattere non valido in posizione 11: atteso un numero
 -- bad control digit
 select codice_fiscale_error('94144670488');
-cifra di controllo sbagliato in posizione 11
+cifra di controllo sbagliata in posizione 11
 select codice_fiscale_error('94144670480');
-cifra di controllo sbagliato in posizione 11
+cifra di controllo sbagliata in posizione 11

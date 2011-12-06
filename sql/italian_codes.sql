@@ -4,7 +4,7 @@
 -- Copyright (C) 2011 Daniele Varrazzo <daniele.varrazzo@gmail.com>
 --
 
-create function _cf_error(s text) returns boolean as
+create function _cf_check(s text) returns boolean as
 $$
 -- Return True if *s* is a valid Codice Fiscale
 -- else raise a 'check_violation' exception with a description of the problem.
@@ -21,7 +21,7 @@ end
 $$ immutable strict language plpgsql;
 
 create domain codice_fiscale as text
-    check (_cf_error(VALUE));
+    check (_cf_check(VALUE));
 
 comment on domain codice_fiscale is
 'A valid Italian Codice Fiscale.';
@@ -34,7 +34,7 @@ $$
 immutable strict language sql;
 
 comment on domain codice_fiscale is
-'Normalize a string representing a codice fiscale.';
+'Normalize a string representing an Italian Codice Fiscale.';
 
 
 create function codice_fiscale(s text) returns codice_fiscale as
@@ -67,6 +67,65 @@ $$ immutable strict language plpgsql;
 
 comment on function codice_fiscale_error(text) is
 'Return the error message for a wrong Codice Fiscale, else NULL.';
+
+
+create function _pi_check(s text) returns boolean as
+$$
+-- Return True if *s* is a valid Partita IVA
+-- else raise a 'check_violation' exception with a description of the problem.
+declare
+    error text := partita_iva_error(s);
+begin
+    if error is null then
+        return true;
+    else
+        raise 'Partita IVA non valida: %', error
+            using errcode = 'check_violation';
+    end if;
+end
+$$ immutable strict language plpgsql;
+
+create domain partita_iva as text
+    check (_pi_check(VALUE));
+
+comment on domain partita_iva is
+'A valid Italian Partita IVA.';
+
+
+create function partita_iva_normalize(s text) returns text as
+$$
+select upper(regexp_replace($1, '[[:space:]]', '', 'g'));
+$$
+immutable strict language sql;
+
+comment on domain partita_iva is
+'Normalize a string representing an Italian Partita IVA.';
+
+
+create function partita_iva(s text) returns partita_iva as
+$$
+select partita_iva_normalize($1)::partita_iva;
+$$
+language sql immutable strict;
+
+comment on function partita_iva(text) is
+'Normalize and return a string into a partita_iva domain.';
+
+
+create function partita_iva_error(s text) returns text as
+$$
+begin
+    if length(s) = 11 then
+        return _cf_error_11(s);
+
+    else
+        return 'lunghezza errata: ' || length(s)::text
+            || '; attesi 11 caratteri';
+    end if;
+
+    return null;
+end
+$$ immutable strict language plpgsql;
 
 
 create function _cf_error_16(s text) returns text as
@@ -172,7 +231,7 @@ begin
     -- Check the control digit
     if _cf_check_digit(substring(s from 1 for 10))
             != substring(s from 11 for 1) then
-        return 'cifra di controllo sbagliato in posizione 11';
+        return 'cifra di controllo sbagliata in posizione 11';
     end if;
 
     -- All fine

@@ -26,19 +26,6 @@ are stored. Provided domains are:
   long;
 - ``partita_iva``: a valid Italian VAT Number.
 
-Each domain has a function with the same name, that can be used to convert a
-non-normal string (such as a string that may contain whitespace o lowercase)
-into a valid domain string::
-
-    =# select codice_fiscale('mss trs 53b19 h892p'::text);
-    MSSTRS53B19H892P
-
-Note that the function doesn't work on a "naked" literal, as the parser
-prefers to interpret the expression ``codice_fiscale('X')`` as the typed
-literal ``'X'::codice_fiscale``, bypassing the normalization. If the function
-argument is an expression, such as the name of the field or a typed string,
-the function works as expected.
-
 
 Functions
 ---------
@@ -61,12 +48,36 @@ Available functions are:
     typed string as above, the function works as expected.
 
 ``codice_fiscale_normalize(s text) -> text``
-    Returns a normalized version of the input string *s*. The normalized
+    Return a normalized version of the input string *s*. The normalized
     output is uppercase and has all the whitespaces stripped. No check is
     performed on the content of the string.
 
 ``codice_fiscale_error(s text) -> text``
-    Returns ``NULL`` if the input string *s* contains a valid *Codice
+    Return ``NULL`` if the input string *s* contains a valid *Codice
     Fiscale*; otherwise return a string with an informative error message.
     *s* must be already normalized.
+
+
+``partita_iva(s text) -> partita_iva``
+    Normalize the input string *s* and return it cast to a *Partita IVA*.
+    If the string is not a valid code, raise a violation check error.
+
+    Example::
+
+        =# select partita_iva('0575346 048 3'::text);
+        05753460483
+
+    Note that the function doesn't work as expected on a "naked" literal, see
+    the ``codice_fiscale()`` function.
+
+``partita_iva_normalize(s text) -> text``
+    Returns a normalized version of the input string *s*. The normalized
+    output has all the whitespaces stripped. No check is performed on the
+    content of the string.
+
+``partita_iva_error(s text) -> text``
+    Return ``NULL`` if the input string *s* contains a valid *Partita IVA*;
+    otherwise return a string with an informative error message.  *s* must be
+    already normalized.
+
 
