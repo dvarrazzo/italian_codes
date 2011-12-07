@@ -33,7 +33,7 @@ select upper(regexp_replace($1, '[[:space:]]', '', 'g'));
 $$
 immutable strict language sql;
 
-comment on domain codice_fiscale is
+comment on function codice_fiscale_normalize(text) is
 'Normalize a string representing an Italian Codice Fiscale.';
 
 
@@ -98,7 +98,7 @@ select upper(regexp_replace($1, '[[:space:]]', '', 'g'));
 $$
 immutable strict language sql;
 
-comment on domain partita_iva is
+comment on function partita_iva_normalize(text) is
 'Normalize a string representing an Italian Partita IVA.';
 
 
@@ -126,6 +126,9 @@ begin
     return null;
 end
 $$ immutable strict language plpgsql;
+
+comment on function partita_iva_error(text) is
+'Return the error message for a wrong Partita IVA, else NULL.';
 
 
 create function _cf_error_16(s text) returns text as
