@@ -1,4 +1,9 @@
-# italian_codes extension
+#
+# italian_codes -- extension control file
+#
+# Copyright (C) 2011 Daniele Varrazzo <daniele.varrazzo@gmail.com>
+#
+
 comment = 'Validation domains for Italian fiscal codes'
-default_version = '0.1'
+default_version = '1.0'
 relocatable = true

@@ -2,7 +2,7 @@
    "name": "italian_codes",
    "abstract": "Validation domains for Italian fiscal codes",
    "description": "The package contains validation domains for Italian codes, such as Codice Fiscale and Partita IVA",
-   "version": "0.1devel",
+   "version": "1.0beta1",
    "maintainer": "Daniele Varrazzo <daniele.varrazzo@gmail.com>",
    "license": "BSD",
    "provides": {
@@ -10,10 +10,21 @@
          "abstract": "Validation domains for Italian fiscal codes",
          "file": "sql/italian_codes.sql",
          "docfile": "doc/italian_codes.rst",
-         "version": "0.1devel"
+         "version": "1.0beta1"
       }
    },
-   "release_status": "unstable",
+   "release_status": "testing",
+   "resources": {
+      "homepage": "https://github.com/dvarrazzo/italian_codes",
+      "bugtracker": {
+        "web": "https://github.com/dvarrazzo/italian_codes/issues",
+      },
+      "repository": {
+        "url": "git://github.com/dvarrazzo/italian_codes.git",
+        "web": "https://github.com/dvarrazzo/italian_codes",
+        "type": "git"
+      },
+   },
    "generated_by": "Daniele Varrazzo <daniele.varrazzo@gmail.com>",
    "meta-spec": {
       "version": "1.0.0",
