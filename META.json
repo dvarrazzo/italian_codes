@@ -17,13 +17,13 @@
    "resources": {
       "homepage": "https://github.com/dvarrazzo/italian_codes",
       "bugtracker": {
-        "web": "https://github.com/dvarrazzo/italian_codes/issues",
+        "web": "https://github.com/dvarrazzo/italian_codes/issues"
       },
       "repository": {
         "url": "git://github.com/dvarrazzo/italian_codes.git",
         "web": "https://github.com/dvarrazzo/italian_codes",
         "type": "git"
-      },
+      }
    },
    "generated_by": "Daniele Varrazzo <daniele.varrazzo@gmail.com>",
    "meta-spec": {
