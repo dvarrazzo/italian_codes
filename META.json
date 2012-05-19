@@ -13,7 +13,7 @@
          "version": "1.0beta1"
       }
    },
-   "release_status": "testing",
+   "release_status": "stable",
    "resources": {
       "homepage": "https://github.com/dvarrazzo/italian_codes",
       "bugtracker": {
