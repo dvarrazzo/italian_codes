@@ -135,14 +135,9 @@ create function _cf_error_16(s text) returns text as
 $$
 begin
     -- Check the basic pattern. If it doesn't match, slow check for errors.
-    -- Note the final '|' char: if missing, in case of no match, the function
-    -- returns no row, not null (because regexp_matches is a SRF). The result
-    -- is that the if block is skipped altogether. Yes, it sucks. Big times.
-    if regexp_matches(s,
-        '[A-Z]{6}'
-        '[0-9L-NP-V]{2}[A-Z][0-9L-NP-V]{2}'
-        '[A-Z][0-9L-NP-V]{3}[A-Z]|')
-            = array[''] then
+    if s !~ '^[A-Z]{6}'
+            '[0-9L-NP-V]{2}[A-Z][0-9L-NP-V]{2}'
+            '[A-Z][0-9L-NP-V]{3}[A-Z]$' then
         for i in 1 .. 16 loop
             declare
                 t text := substring('CCCCCCNNCNNCNNNC', i, 1);
@@ -214,7 +209,7 @@ create function _cf_error_11(s text) returns text as
 $$
 begin
     -- Check the basic pattern. If it doesn't match, slow check for errors.
-    if regexp_matches(s, '[0-9]{11}|') = array[''] then
+    if s !~ '^[0-9]{11}$' then
         for i in 1 .. 11 loop
             declare
                 c text := substring(s, i, 1);
