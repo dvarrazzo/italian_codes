@@ -10,7 +10,7 @@
          "abstract": "Validation domains for Italian fiscal codes",
          "file": "sql/italian_codes.sql",
          "docfile": "doc/italian_codes.rst",
-         "version": "1.0beta1"
+         "version": "1.0-devel"
       }
    },
    "release_status": "stable",
