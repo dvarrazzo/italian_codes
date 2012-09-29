@@ -4,7 +4,7 @@
    "description": "The package contains validation domains for Italian codes, such as Codice Fiscale and Partita IVA",
    "version": "1.0-devel",
    "maintainer": "Daniele Varrazzo <daniele.varrazzo@gmail.com>",
-   "license": "BSD",
+   "license": "bsd",
    "provides": {
       "italian_codes": {
          "abstract": "Validation domains for Italian fiscal codes",
