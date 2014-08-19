@@ -2,8 +2,11 @@ Italian Codes Extension
 =======================
 
 The extension contains validation domains for Italian fiscal codes, such as
-*Codice Fiscale* and *Partita IVA*. See included documentation for
-instructions about the extension objects and their usage.
+*Codice Fiscale* and *Partita IVA*. See included documentation (in Italian_
+and English_) for instructions about the extension objects and their usage.
+
+.. _Italian: doc/codici_italiani.rst
+.. _English: doc/italian_codes.rst
 
 
 Installation
@@ -15,7 +18,7 @@ run::
     pgxn install italian_codes
     pgxn load -d mydb italian_codes
 
-.. __: pgxnclient.projects.postgresql.org
+.. __: http://pgxnclient.projects.postgresql.org/
 
 To build from source, just do this::
 
